@@ -9,7 +9,7 @@ class RandomWordsState extends State<RandomWords> {
 
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
-  int mCurrentIdx = 0;
+  int _currentIdx = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,28 +28,35 @@ class RandomWordsState extends State<RandomWords> {
       ),
       body: _buildSuggestions(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _deleteItem,
+        child: Icon(Icons.refresh),
+        onPressed: () {
+          setState(() {
+            _suggestions.clear();
+          });
+        },
         tooltip: 'delete',
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        fixedColor: Colors.blue,
         items: _initBottomNavigationBarItem(),
-        currentIndex: mCurrentIdx,
+        currentIndex: _currentIdx,
         onTap: (i) {
           setState(() {
-            mCurrentIdx = i;
+            _currentIdx = i;
           });
         },
       ),
     );
   }
 
-/// 初始化底部菜单
+  /// 初始化底部菜单
   List<BottomNavigationBarItem> _initBottomNavigationBarItem() {
     final bottomNavigationItem = <BottomNavigationBarItem>[];
     bottomNavigationItem.add(
         BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('首页')));
     bottomNavigationItem.add(BottomNavigationBarItem(
-        icon: Icon(Icons.library_music), title: Text('收藏')));
+        icon: Icon(Icons.library_music), title: Text('音乐')));
     bottomNavigationItem.add(BottomNavigationBarItem(
         icon: Icon(Icons.featured_video), title: Text('视频')));
     bottomNavigationItem.add(
@@ -57,7 +64,7 @@ class RandomWordsState extends State<RandomWords> {
     return bottomNavigationItem;
   }
 
-///构造列表
+  ///构造列表
   Widget _buildSuggestions() {
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
@@ -80,7 +87,7 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
-///构造第行数据
+  ///构造第行数据
   Widget _buildRow(WordPair pair) {
     final alreadySaved = _saved.contains(pair);
     return ListTile(
@@ -105,7 +112,7 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
-///点击菜单跳转页面
+  ///点击菜单跳转页面
   void _pushSaved() {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       final tiles = _saved.map(
@@ -131,13 +138,14 @@ class RandomWordsState extends State<RandomWords> {
         ),
         body: ListView(children: divided),
         floatingActionButton: FloatingActionButton(
-          onPressed: _deleteItem,
+          child: Icon(Icons.delete),
+          onPressed: () {
+            setState(() {
+              _saved.clear();
+            });
+          },
         ),
       );
     }));
-  }
-
-  void _deleteItem() {
-    print('object');
   }
 }
