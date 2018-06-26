@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
     //   ),
     // );
 
-
     return MaterialApp(
       title: 'Starup Name Generator',
       home: RandomWords(),
