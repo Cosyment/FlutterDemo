@@ -9,25 +9,55 @@ class RandomWordsState extends State<RandomWords> {
 
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
+  int mCurrentIdx = 0;
+
   @override
   Widget build(BuildContext context) {
-    // final wordPair = WordPair.random();
-    // return Text(wordPair.asPascalCase);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Starup Name Generator'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.list),
+            icon: Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ),
             onPressed: _pushSaved,
           )
         ],
       ),
       body: _buildSuggestions(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _deleteItem,
+        tooltip: 'delete',
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: _initBottomNavigationBarItem(),
+        currentIndex: mCurrentIdx,
+        onTap: (i) {
+          setState(() {
+            mCurrentIdx = i;
+          });
+        },
+      ),
     );
   }
 
+/// 初始化底部菜单
+  List<BottomNavigationBarItem> _initBottomNavigationBarItem() {
+    final bottomNavigationItem = <BottomNavigationBarItem>[];
+    bottomNavigationItem.add(
+        BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('首页')));
+    bottomNavigationItem.add(BottomNavigationBarItem(
+        icon: Icon(Icons.library_music), title: Text('收藏')));
+    bottomNavigationItem.add(BottomNavigationBarItem(
+        icon: Icon(Icons.featured_video), title: Text('视频')));
+    bottomNavigationItem.add(
+        BottomNavigationBarItem(icon: Icon(Icons.games), title: Text('游戏')));
+    return bottomNavigationItem;
+  }
+
+///构造列表
   Widget _buildSuggestions() {
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
@@ -50,6 +80,7 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
+///构造第行数据
   Widget _buildRow(WordPair pair) {
     final alreadySaved = _saved.contains(pair);
     return ListTile(
@@ -74,6 +105,7 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
+///点击菜单跳转页面
   void _pushSaved() {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       final tiles = _saved.map(
@@ -90,14 +122,22 @@ class RandomWordsState extends State<RandomWords> {
           .divideTiles(
             context: context,
             tiles: tiles,
-          ) .toList();
+          )
+          .toList();
 
       return Scaffold(
         appBar: AppBar(
           title: Text('Saved Suggestions'),
         ),
         body: ListView(children: divided),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _deleteItem,
+        ),
       );
     }));
+  }
+
+  void _deleteItem() {
+    print('object');
   }
 }
