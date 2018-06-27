@@ -7,46 +7,53 @@ import 'RandomWordsState.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return MainState();
+  }
+}
+
+class MainState extends State<MyApp> {
   int _currentIndex = 0;
-
-  // @override
-  //   State<StatefulWidget> createState() {
-  //     // TODO: implement createState
-  //     return Scaffold(
-  //       body: Text('data'),
-  //     );
-  //   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     title: 'Starup Name Generator',
-  //     // home: RandomWords(),
-  //     home: DefaultTabController(
-  //       child: RandomWords(),
-  //       length: 4,
-  //     ),
-  //     theme: ThemeData(primaryColor: Colors.white),
-
-  //   );
-  // }
+  String _title = '首页';
+  List<BottomNavigationBarItem> _bottomNavigationBarItemList =
+      _initBottomNavigationBarItem();
+  List<Widget> _bodyList = _initBody();
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: _initBottomNavigationBarItem(),
-        currentIndex: _currentIndex,
-        onTap: (i) {
-          setState(() {
-            _currentIndex = i;
-          });
-        },
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(_title),
+        ),
+        body: _bodyList[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: _bottomNavigationBarItemList,
+          currentIndex: _currentIndex,
+          onTap: (i) {
+            setState(() {
+              _title = (_bottomNavigationBarItemList[i].title as Text).data;
+              _currentIndex = i;
+            });
+          },
+        ),
       ),
     );
   }
+}
+
+List<Widget> _initBody() {
+  final bodyList = <Widget>[];
+  bodyList.add(HomeModule());
+  bodyList.add(MusicModule());
+  bodyList.add(VideoModule());
+  bodyList.add(GameModule());
+  return bodyList;
 }
 
 /// 初始化底部菜单
@@ -75,24 +82,15 @@ class HomeModule extends StatefulWidget {
 
 class MusicModule extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return MusicModuleState();
-  }
+  createState() => MusicModuleState();
 }
 
 class VideoModule extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return VideoModuleState();
-  }
+  createState() => VideoModuleState();
 }
 
 class GameModule extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return GameModuleState();
-  }
+  createState() => GameModuleState();
 }
