@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'main.dart';
 
 class MusicModuleState extends State<MusicModule> {
@@ -11,11 +12,21 @@ class MusicModuleState extends State<MusicModule> {
   }
 
   Widget _buildBody() {
-    return ListView.builder(
-      itemBuilder: (context, i) {
-        return _buildRow(context, i);
-      },
+    return RefreshIndicator(
+      displacement: 40.0,
+      child: ListView.builder(
+        itemBuilder: (context, i) {
+          return _buildRow(context, i);
+        },
+      ),
+      onRefresh: () {},
     );
+    // return ListView.builder(
+    //   physics: const AlwaysScrollableScrollPhysics(),
+    //   itemBuilder: (context, i) {
+    //     return _buildRow(context, i);
+    //   },
+    // );
   }
 
   Widget _buildRow(BuildContext context, int index) {
